@@ -10,8 +10,10 @@ import 'models/transaction.dart';
 main() => runApp(ExpensesApp());
 
 class ExpensesApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
         home: MyHomePage(),
         theme: ThemeData(
@@ -19,16 +21,15 @@ class ExpensesApp extends StatelessWidget {
           accentColor: Colors.amber,
           fontFamily: 'Quicksand',
           textTheme: ThemeData.light().textTheme.copyWith(
-                title: TextStyle(
-                  fontFamily: 'OpenSans',
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              button : TextStyle(
-                color : Colors.white,
+              title: TextStyle(
+                fontFamily: 'OpenSans',
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
-              )
               ),
+              button: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              )),
         ));
   }
 }
@@ -82,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.of(context).pop();
   }
 
-  _removeTransaction(String id){
+  _removeTransaction(String id) {
     setState(() {
       _transactions.removeWhere((tr) => tr.id == id);
     });
@@ -99,25 +100,34 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Despesas Pessoais',
-            style: TextStyle(
-              fontFamily: 'Opensans',
-            )),
+
+    final appBar = AppBar(
+        title: Text('Despesas Pessoais'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () => _opentransactionFormModal(context),
           )
         ],
-      ),
+      );
+
+    final availableHeight = MediaQuery.of(context).size.height 
+    - appBar.preferredSize.height - MediaQuery.of(context).padding.top;
+
+    return Scaffold(
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Chart(_recentTransactions),
-            TransactionList(_transactions, _removeTransaction),
+            Container(
+              height: availableHeight * 0.30,
+              child: Chart(_recentTransactions),
+            ),
+            Container(
+              height: availableHeight * 0.70,
+              child: TransactionList(_transactions, _removeTransaction),
+            ),
           ],
         ),
       ),
